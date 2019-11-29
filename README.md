@@ -1,4 +1,4 @@
-#CycleDehaze in PyTorch
+# CycleDehaze in PyTorch
 
 Reimplementation of Cycle-Dehaze: Enhanced CycleGAN for Single Image Dehazing - https://arxiv.org/pdf/1805.05308.pdf
 
