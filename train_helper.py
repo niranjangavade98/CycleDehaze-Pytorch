@@ -33,8 +33,8 @@ class DehazeDataset(Dataset):
         # randomize the index for domain Y to avoid fixed pairs.
         ind_Y = random.randint(0, len(self.Y_dir_list) - 1)
         Y_img_path = self.Y_dir_list[ind_Y]
-        X_img = Image.open(os.path.join(self.root_dir,X_img_path)).convert('RGB')
-        Y_img = Image.open(os.path.join(self.root_dir,Y_img_path)).convert('RGB')
+        X_img = Image.open(os.path.join(self.root_dir,self.train_X,X_img_path)).convert('RGB')
+        Y_img = Image.open(os.path.join(self.root_dir,self.train_Y,Y_img_path)).convert('RGB')
         # apply image transformation
         X = self.transforms(X_img)
         Y = self.transforms(Y_img)
