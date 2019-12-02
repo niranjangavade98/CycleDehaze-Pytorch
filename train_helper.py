@@ -19,7 +19,7 @@ class DehazeDataset(Dataset):
     def __len__(self):
         assert len(self.X_dir_list) == len(self.Y_dir_list), "Number of files in {} & {} are not the same".format(self.train_X,self.train_Y)
         return len(self.X_dir_list)
-    def __getitem__(self,idx):
+    def __getitem__(self,index):
         """Return a data point and its metadata information.
         Parameters:
             index (int)      -- a random integer for data indexing
@@ -39,8 +39,6 @@ class DehazeDataset(Dataset):
         X = self.transforms(X_img)
         Y = self.transforms(Y_img)
         return {'X': X, 'Y': Y, 'X_paths': X_img_path, 'Y_paths': Y_img_path}
-    
-    '''
     def get_transforms(self, resize_to=286, interpolation=Image.BICUBIC, crop_size=256):
         """
         Returns 'transforms.Compose object' to apply on images.   Applies resize,randomCrop,
@@ -58,7 +56,8 @@ class DehazeDataset(Dataset):
         all_transforms.append(transforms.ToTensor())
         all_transforms.append(transforms.Normalize((0.5, 0.5, 0.5),(0.5, 0.5, 0.5)))
         return transforms.Compose(all_transforms)
-
+    
+    '''
     def get_batch(self, batch_size=7):
         """
         Get a batch of image names from train_X & train_Y of specified batch_size
