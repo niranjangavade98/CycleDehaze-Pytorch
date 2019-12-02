@@ -1,71 +1,46 @@
-from torch.utils.data import Dataset
-from model import CycleGan
+#from model import CycleGan
+from torch.utils.data import DataLoader
+
+from train_helper import DehazeDataset
 
 import argparse
 import os
-import random
 
 parser = argparse.ArgumentParser(description='Code for training CycleGan on DeHazing task')
 parser.add_argument('-d','--data',help="root directory where all data for training is stored; default='data/'",required=True,default='data/')
-parser.add_argument('-b','--batch-size',type=int,help='specify batch-size for training',required=true,default=8)
+parser.add_argument('-b','--batch-size',type=int,help='specify batch-size for training',required=True,default=8)
+parser.add_argument('-n','--num-workers',help="number of DataLoader workers/threads",required=True,type=int,default=4)
 args = parser.parse_args()
 
-class DehazeDataset(Dataset):
-    "Dehazing Dataset"
-    def __init__(self, root_dir, transform=None):
-        self.root_dir=root_dir
-        self.transform=transform
-        self.train_X='train_X'
-        self.train_Y='train_Y'
-        self.X_dir_list = os.listdir(os.path.join(self.root_dir, self.train_X))
-        self.Y_dir_list = os.listdir(os.path.join(self.root_dir, self.train_Y))
-        random.shuffle(self.X_dir_list)
-        random.shuffle(self.Y_dir_list)
-        self.iter=0
-    def __len__(self):
-        assert len(self.X_dir_list) == len(self.Y_dir_list), "Number of files in {} & {} are not the same".format(self.train_X,self.train_Y)
-        return len(self.X_dir_list)
-    def __getitem__(self,idx):
-        pass
-    def get_batch(self, batch_size=7):
-        """
-        Get a batch of image names from train_X & train_Y of specified batch_size
+class LoadDataset():
+    """
+    Load dataset which gives transformed images automatically & also contains a DataLoader for this dataset
+    """
+    def __init__(self):
+        # parse data from args passed
+        data_dir = args.data
+        batch_size = args.batch_size
+        num_workers = args.num_workers
 
-        Args:
-            batch_size : size of batch to return
-        """
-        assert len(self.X_dir_list) == len(self.Y_dir_list), "Number of files in {} & {} are not the same".format(self.train_X,self.train_Y)
-        if self.iter < len(self.X_dir_list):
-            if self.iter+batch_size >= len(self.X_dir_list):
-                batch_X = self.X_dir_list[self.iter:]
-                batch_Y = self.Y_dir_list[self.iter:]
-            else:
-                batch_X = self.X_dir_list[self.iter:self.iter+batch_size]
-                batch_Y = self.Y_dir_list[self.iter:self.iter+batch_size]
-            self.iter=self.iter+batch_size
-            return batch_X, batch_Y
-        else:
-            print("All samples from the dataset have been used; please reset the dataset by using <reset_dataset> func")
-    def reset_dataset(self):
-        """
-        Re-shufles train_X & train_Y & sets self.iter to 0
-        """
-        self.iter=0
-        random.shuffle(self.X_dir_list)
-        random.shuffle(self.Y_dir_list)
+        #check if data dir exists
+        assert os.path.isdir(data_dir), "{} is not a valid directory".format(data_dir)
 
+        # create dataset (transforms are also included in this only)
+        self.dataset = DehazeDataset(data_dir)
+
+        # create custom DataLoader
+        self.dataloader = DataLoader(self.dataset,
+                batch_size=batch_size,
+                shuffle=True,
+                num_workers=num_workers)
 
 def train():
-    # parse data from args passed
-    data_dir = args.data
-    batch = args.batch_size
-
-    #check if data dir exists
-    assert os.path.isdir(data_dir), "{} is not a valid directory".format(data_dir)
     
-    # create transforms for data
+    print('Loading dataset...')
+    dataset = LoadDataset()
+    print('Dataset loaded successfully...')
+    print('Dataset contains {} distinct datapoints in X(source) & Y(target) domain\n\n'.format(len(dataset)))
 
-    # create custom DataLoader
 
     # create G, F
 
