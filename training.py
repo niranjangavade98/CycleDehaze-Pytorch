@@ -14,17 +14,19 @@ def train():
     data_dir = args.data
     batch = args.batch_size
 
-    assert os.path.isdir(data_dir), "{} is not a valid directory".format(data_dir) #check if data dir exists
+    #check if data dir exists
+    assert os.path.isdir(data_dir), "{} is not a valid directory".format(data_dir)
     
+    # create transforms for data
+
+
+    # create custom DataLoader
+
     # create G, F
 
     # create D_Y, D_X
 
     # create 3-loss_functions - Adv_loss, Cycle_consistent_loss, perceptual_loss
-
-    # create transforms for data
-
-    # create custom DataLoader
 
     # iterate over the dataset to train
 
