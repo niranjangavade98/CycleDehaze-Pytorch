@@ -33,6 +33,8 @@ class LoadDataset():
                 batch_size=batch_size,
                 shuffle=True,
                 num_workers=num_workers)
+    def __len__(self):
+        return len(self.dataset)
 
 def train():
     
