@@ -12,36 +12,29 @@ parser.add_argument('-b','--batch-size',type=int,help='specify batch-size for tr
 parser.add_argument('-n','--num-workers',help="number of DataLoader workers/threads",required=True,type=int,default=4)
 args = parser.parse_args()
 
-class LoadDataset():
-    """
-    Load dataset which gives transformed images automatically & also contains a DataLoader for this dataset
-    """
-    def __init__(self):
-        # parse data from args passed
-        data_dir = args.data
-        batch_size = args.batch_size
-        num_workers = args.num_workers
-
-        #check if data dir exists
-        assert os.path.isdir(data_dir), "{} is not a valid directory".format(data_dir)
-
-        # create dataset (transforms are also included in this only)
-        self.dataset = DehazeDataset(data_dir)
-
-        # create custom DataLoader
-        self.dataloader = DataLoader(self.dataset,
-                batch_size=batch_size,
-                shuffle=True,
-                num_workers=num_workers)
-    def __len__(self):
-        return len(self.dataset)
-
 def train():
     
+    # parse data from args passed
+    data_dir = args.data
+    batch_size = args.batch_size
+    num_workers = args.num_workers
+
+    #check if data dir exists
+    assert os.path.isdir(data_dir), "{} is not a valid directory".format(data_dir)
+
+    # create dataset (transforms are also included in this only)
     print('Loading dataset...')
-    dataset = LoadDataset()
+    dataset = DehazeDataset(data_dir)
     print('Dataset loaded successfully...')
     print('Dataset contains {} distinct datapoints in X(source) & Y(target) domain\n\n'.format(len(dataset)))
+
+    # create custom DataLoader
+    dataloader = DataLoader(dataset,
+            batch_size=batch_size,
+            shuffle=True,
+            num_workers=num_workers)
+
+    print(dataset[0])
 
 
     # create G, F
