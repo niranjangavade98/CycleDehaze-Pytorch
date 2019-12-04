@@ -35,6 +35,7 @@ def train():
             shuffle=True,
             num_workers=num_workers)
 
+
     # create G, F
     print('Loading Generators(G & F)...')
     G = Generator()
