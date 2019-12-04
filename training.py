@@ -2,6 +2,7 @@
 from torch.utils.data import DataLoader
 
 from train_helper import DehazeDataset
+from generator import Generator
 
 import argparse
 import os
@@ -34,10 +35,11 @@ def train():
             shuffle=True,
             num_workers=num_workers)
 
-    print(dataset[0])
-
-
     # create G, F
+    print('Loading Generators(G & F)...')
+    G = Generator()
+    F = Generator()
+    print('Generators(G & F) loaded successfully...')
 
     # create D_Y, D_X
 
