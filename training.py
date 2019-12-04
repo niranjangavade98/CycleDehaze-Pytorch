@@ -1,5 +1,6 @@
 #from model import CycleGan
 from torch.utils.data import DataLoader
+#from torchsummary import summary           # pip install torchsummary          #for using summary to check model summary
 
 from train_helper import DehazeDataset
 from generator import Generator
@@ -42,6 +43,16 @@ def train():
     F = Generator()
     print('Generators(G & F) loaded successfully...')
 
+    
+    
+    # check generator summary
+    
+    #summary(G,(3,256,256))
+    # OR
+    #print(G)
+
+    
+    
     # create D_Y, D_X
 
     # create 3-loss_functions - Adv_loss, Cycle_consistent_loss, perceptual_loss
