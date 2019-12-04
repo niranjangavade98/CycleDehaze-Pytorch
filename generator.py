@@ -34,7 +34,7 @@ class Generator(nn.Module):
                     nn.ReLU(True),                                                      #
                 ]
         
-        for i in range(res_blocks):                                                     #add multiple ResNet blocks
+        for _ in range(res_blocks):                                                     #add multiple ResNet blocks
 
             model +=[
                         ResnetBlock(inp_channels=256, norm_layer=norm_layer, use_dropout=False)
@@ -73,7 +73,7 @@ class ResnetBlock(nn.Module):
     norm_layer       : normalisation layer to be used
     use_dropout      : whether to use dropout or not; default=False
     """
-    def __init__(self, inp_channels=256, norm_layer, use_dropout=False):
+    def __init__(self, norm_layer, inp_channels=256, use_dropout=False):
         """Initialize the Resnet block
         A resnet block is a conv block with skip connections
         We construct a conv block ,
