@@ -4,6 +4,7 @@ from torch.utils.data import DataLoader
 
 from train_helper import DehazeDataset
 from generator import Generator
+from discriminator import Discriminator
 
 import argparse
 import os
@@ -42,6 +43,12 @@ def train():
     G = Generator()
     F = Generator()
     print('Generators(G & F) loaded successfully...')
+
+    # create Dx, Dy
+    print('Loading Discriminators(Dx, Dy)...')
+    Dx = Discriminator()
+    Dy = Discriminator()
+    print('Discriminators(Dx, Dy) loaded successfully...')
 
     
     

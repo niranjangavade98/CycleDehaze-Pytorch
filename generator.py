@@ -21,7 +21,7 @@ class Generator(nn.Module):
         model = [   
                     nn.ReflectionPad2d(3),                                              #Reflection padding applied to inp image
 
-                    nn.Conv2d(inp, 64, kernel_size=7, padding=0, bias=True),            #7X7 conv applied; 64 filters/outputs
+                    nn.Conv2d(inp, 64, kernel_size=7, padding=0, bias=True),            #7X7 conv applied; 64 filters/output channels
                     norm_layer(64),                                                     #InstanceNorm2D applied
                     nn.ReLU(True),                                                      #Relu activalion applied
 
