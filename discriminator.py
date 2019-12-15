@@ -2,7 +2,17 @@ import torch.nn as nn
 import functools
 
 class Discriminator(nn.Module):
+    """
+    Discriminator class
+    """
     def __init__(self,inp=3,out=1):
+        """
+        Initializes the PatchGAN model with 3 layers as discriminator
+
+        Args:
+        inp: number of input image channels
+        out: number of output image channels
+        """
 
         super(Discriminator, self).__init__()
 
@@ -31,5 +41,11 @@ class Discriminator(nn.Module):
     def forward(self, input):
         """
             Feed forward the image produced by generator through discriminator
+
+            Args:
+            input: input image
+
+            Returns:
+            outputs prediction map with 1 channel 
         """
-        return sel.model(input)
+        return self.model(input)
