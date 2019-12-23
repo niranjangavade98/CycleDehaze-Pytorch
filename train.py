@@ -1,10 +1,13 @@
 #from model import CycleGan
 from torch.utils.data import DataLoader
+import torch.nn as nn
+import torch.optim as optim
 #from torchsummary import summary           # pip install torchsummary          #for using summary to check model summary
 
 from train_helper import DehazeDataset
 from generator import Generator
 from discriminator import Discriminator
+import loss
 
 import argparse
 import os
@@ -58,11 +61,23 @@ def train():
     # OR
     #print(G)
 
+    # check discriminator summary
     
-    
-    # create D_Y, D_X
+    #summary(Dx,(3,256,256))
+    # OR
+    #print(Dx)
+
 
     # create 3-loss_functions - Adv_loss, Cycle_consistent_loss, perceptual_loss
+    criterionGAN = loss.GANloss().to(device)                                            # change device
+    criterionCycle = nn.L1Loss()
+    criterionIdt = nn.L1Loss()
+
+    # create optimizers
+    optimizer_G = optim.Adam(itertools.chain(G.parameters(), F.parameters()), lr=opt.lr, betas=(opt.beta1, 0.999))
+    optimizer_D = optim.Adam(itertools.chain(Dx.parameters(), Dy.parameters()), lr=opt.lr, betas=(opt.beta1, 0.999))
+            
+
 
     # iterate over the dataset to train
 
