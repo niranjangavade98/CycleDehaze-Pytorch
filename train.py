@@ -29,6 +29,7 @@ def train(learning_rate=0.0002, beta1=0.5,epochs=1):
     #check if data dir exists
     assert os.path.isdir(data_dir), "{} is not a valid directory".format(data_dir)
 
+    '''
     # create dataset (transforms are also included in this only)
     print('Loading dataset...')
     dataset = DehazeDataset(data_dir)
@@ -40,6 +41,7 @@ def train(learning_rate=0.0002, beta1=0.5,epochs=1):
             batch_size=batch_size,
             shuffle=True,
             num_workers=num_workers)
+    '''
 
 
     # create G, F
@@ -93,7 +95,7 @@ def train(learning_rate=0.0002, beta1=0.5,epochs=1):
         epoch_iter = 0                  # the number of training iterations in current epoch, reset to 0 every epoch
 
         for i, batch in enumerate(dataset):  # inner loop within one epoch
-            
+            pass
 
     
 
