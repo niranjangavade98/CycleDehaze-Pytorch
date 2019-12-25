@@ -7,9 +7,10 @@ import torch.optim as optim
 from train_helper import DehazeDataset
 from generator import Generator
 from discriminator import Discriminator
-import loss
+from loss import GANLoss
 
 import argparse
+import itertools
 import os
 
 parser = argparse.ArgumentParser(description='Code for training CycleGan on DeHazing task')
@@ -18,7 +19,7 @@ parser.add_argument('-b','--batch-size',type=int,help='specify batch-size for tr
 parser.add_argument('-n','--num-workers',help="number of DataLoader workers/threads",required=True,type=int,default=4)
 args = parser.parse_args()
 
-def train():
+def train(learning_rate=0.0002, beta1=0.5):
     
     # parse data from args passed
     data_dir = args.data
@@ -59,23 +60,26 @@ def train():
     
     #summary(G,(3,256,256))
     # OR
-    #print(G)
+    print(G)                                        # print Generator
 
     # check discriminator summary
     
     #summary(Dx,(3,256,256))
     # OR
-    #print(Dx)
+    print(Dx)                                       # print Discriminator
 
 
     # create 3-loss_functions - Adv_loss, Cycle_consistent_loss, perceptual_loss
-    criterionGAN = loss.GANloss().to(device)                                            # change device
+    criterionGAN = GANLoss().to(device)                                           ############## change device
     criterionCycle = nn.L1Loss()
     criterionIdt = nn.L1Loss()
 
     # create optimizers
-    optimizer_G = optim.Adam(itertools.chain(G.parameters(), F.parameters()), lr=opt.lr, betas=(opt.beta1, 0.999))
-    optimizer_D = optim.Adam(itertools.chain(Dx.parameters(), Dy.parameters()), lr=opt.lr, betas=(opt.beta1, 0.999))
+    optimizers = []
+    optimizer_G = optim.Adam(itertools.chain(G.parameters(), F.parameters()), lr = learning_rate, betas=(beta1, 0.999))
+    optimizer_D = optim.Adam(itertools.chain(Dx.parameters(), Dy.parameters()), lr = learning_rate, betas=(beta1, 0.999))
+    optimizers.append(optimizer_G)
+    optimizers.append(optimizer_D)
             
 
 

@@ -2,6 +2,7 @@
 Define classes for various loss being used
 """
 
+import torch
 import torch.nn as nn
 
 
