@@ -19,7 +19,7 @@ parser.add_argument('-b','--batch-size',type=int,help='specify batch-size for tr
 parser.add_argument('-n','--num-workers',help="number of DataLoader workers/threads",required=True,type=int,default=4)
 args = parser.parse_args()
 
-def train(learning_rate=0.0002, beta1=0.5):
+def train(learning_rate=0.0002, beta1=0.5,epochs=1):
     
     # parse data from args passed
     data_dir = args.data
@@ -87,15 +87,13 @@ def train(learning_rate=0.0002, beta1=0.5):
     print('Number of training images = %d' % len(dataset))
 
     # iterate over dataset for training
-    for epoch in range(opt.epoch_count, opt.niter + opt.niter_decay + 1):    # outer loop for different epochs; we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>
-        epoch_start_time = time.time()  # timer for entire epoch
-        iter_data_time = time.time()    # timer for data loading per iteration
+    for epoch in range(epochs):    # outer loop for different epochs; we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>
+        #epoch_start_time = time.time()  # timer for entire epoch
+        #iter_data_time = time.time()    # timer for data loading per iteration
         epoch_iter = 0                  # the number of training iterations in current epoch, reset to 0 every epoch
 
-        for i, data in enumerate(dataset):  # inner loop within one epoch
-            iter_start_time = time.time()  # timer for computation per iteration
-            if total_iters % opt.print_freq == 0:
-                t_data = iter_start_time - iter_data_time
+        for i, batch in enumerate(dataset):  # inner loop within one epoch
+            
 
     
 
