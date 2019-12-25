@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.optim as optim
 #from torchsummary import summary           # pip install torchsummary          #for using summary to check model summary
 
-from train_helper import DehazeDataset
+from train_helper import CustomDatasetLoader
 from generator import Generator
 from discriminator import Discriminator
 from loss import GANLoss
@@ -81,9 +81,12 @@ def train(learning_rate=0.0002, beta1=0.5):
     optimizers.append(optimizer_G)
     optimizers.append(optimizer_D)
             
-
-
     # iterate over the dataset to train
+    data_loader = CustomDatasetLoader()
+    dataset = data_loader.load_data()
+    print('Number of training images = %d' % len(dataset))
+
+    
 
 
 if __name__=='__main__':

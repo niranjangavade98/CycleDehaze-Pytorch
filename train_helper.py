@@ -1,4 +1,4 @@
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
 import torchvision.transforms as transforms
 
 import os
@@ -11,14 +11,17 @@ class DehazeDataset(Dataset):
         self.root_dir=root_dir
         self.train_X='train_X'
         self.train_Y='train_Y'
-        self.X_dir_list = os.listdir(os.path.join(self.root_dir, self.train_X))
-        self.Y_dir_list = os.listdir(os.path.join(self.root_dir, self.train_Y))
+        self.X_dir_list = os.listdir(os.path.join(self.root_dir, self.train_X))     # get list of image paths in domain X
+        self.Y_dir_list = os.listdir(os.path.join(self.root_dir, self.train_Y))     # get list of image paths in domain Y
         random.shuffle(self.X_dir_list)
         random.shuffle(self.Y_dir_list)
-        self.transforms = self.get_transforms()
+        self.transforms = self.get_transforms()                                     # get transforms to apply to all images
+
+
     def __len__(self):
         assert len(self.X_dir_list) == len(self.Y_dir_list), "Number of files in {} & {} are not the same".format(self.train_X,self.train_Y)
         return len(self.X_dir_list)
+
     def __getitem__(self,index):
         """Return a data point and its metadata information.
         Parameters:
@@ -39,6 +42,7 @@ class DehazeDataset(Dataset):
         X = self.transforms(X_img)
         Y = self.transforms(Y_img)
         return {'X': X, 'Y': Y, 'X_paths': X_img_path, 'Y_paths': Y_img_path}
+
     def get_transforms(self, resize_to=286, interpolation=Image.BICUBIC, crop_size=256):
         """
         Returns 'transforms.Compose object' to apply on images.   Applies resize,randomCrop,
@@ -54,7 +58,7 @@ class DehazeDataset(Dataset):
         all_transforms.append(transforms.RandomCrop(crop_size))
         all_transforms.append(transforms.RandomHorizontalFlip())
         all_transforms.append(transforms.ToTensor())
-        all_transforms.append(transforms.Normalize((0.5, 0.5, 0.5),(0.5, 0.5, 0.5)))
+        all_transforms.append(transforms.Normalize( (0.5, 0.5, 0.5), (0.5, 0.5, 0.5) ))
         return transforms.Compose(all_transforms)
     
     '''
@@ -85,3 +89,21 @@ class DehazeDataset(Dataset):
         random.shuffle(self.X_dir_list)
         random.shuffle(self.Y_dir_list)
     '''
+
+class CustomDatasetLoader():
+
+    def __init__(self, root_dir='./data', batch_size=1, threads=1):
+        self.dataset = DehazeDataset(root_dir)
+        self.dataloader = DataLoader(self.dataset, batch_size=batch_size, shuffle=True, num_workers=int(threads))
+
+    def __len__(self):
+        """Return the number of data in the dataset"""
+        return len(self.dataset)
+
+    def __iter__(self):
+        """Return a batch of data"""
+        for i, data in enumerate(self.dataloader):
+            yield data
+            
+    def load_data(self):
+        return self
